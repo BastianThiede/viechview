@@ -1,0 +1,80 @@
+<html>
+<head>
+<title>Viech View</title>
+<meta http-equiv="refresh" content="60;">
+<script>
+var hosts = {
+	"localhost:31337": "fabi"
+//	"192.168.0.12:31337": "basti",
+//	"192.168.0.8:31337": "tobi"
+},
+order = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+function addImages(ip, list, day) {
+	var hostname = hosts[ip],
+		container = document.getElementById(hostname);
+	for(var i = 0; i < list.length; i++) {
+		var ts = list[i],
+			name = day+ts,
+			img = document.createElement("img");
+		img.cachedSrc = "http://"+ip+"/key/"+name;
+		img.style.width = "100%";
+		img.title = hostname+" "+name;
+		list[i] = img;
+	}
+	var div = document.createElement("div"),
+		text = document.createElement("b");
+	for(var i = 0; i < list.length; i++)
+		scored[list[i].time] = list[i].img;
+		text.innerHTML = day + "<br>";
+		div.appendChild(text);
+		for(var i=0; i < list.length; i++) {	
+			tmp = list[i];
+			tmp.src = tmp.cachedSrc;
+			div.appendChild(tmp);
+		}
+		container.appendChild(div);	
+	}
+	tmp.id = "end";
+	tmp.addEventListener("load", function() {
+		document.location.href="#end";
+	});
+}
+document.addEventListener("DOMContentLoaded", function() {	
+	var ips = Object.keys(hosts),
+		day = document.location.hash.substring(1);
+	if(order.indexOf(day) === -1)
+		day = "Mon";
+	for(var i = 0; i < order.length; i++) {
+		var link = document.createElement("a");
+		link.innerHTML = "#"+order[i];
+		link.href = link.innerHTML;
+		document.body.appendChild(link)
+		document.body.appendChild(document.createElement("br"));
+	}
+	for(var host in hosts) {
+		var container = document.createElement("div"),
+			name = document.createElement("h1");
+		name.innerHTML = hosts[host];
+		container.style.width = (100/ips.length)+"%";
+		container.style.float = "right";
+		container.id = hosts[host];
+		container.appendChild(name);
+		document.body.appendChild(container);
+	}
+	for(var i = 0; i < ips.length; i++) {
+		var ajax = new XMLHttpRequest(); 
+		ajax.ip = ips[i];
+		ajax.addEventListener("readystatechange", function() {
+			if(this.readyState == XMLHttpRequest.DONE && this.status == 200)
+				addImages(this.ip, JSON.parse(this.response), da, dayy);
+		});
+		ajax.open("GET", "http://"+ajax.ip+"/list/"+day+"/-100/-1", true);
+		ajax.send();
+	}
+});
+</script>
+</head>
+<body>
+	<h1>Viech View</title>
+</body>
+</html>
