@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+	<div id="my_camera"></div>
+	<script src="./webcam.js"></script>
+	<script>
+		Webcam.set({
+			width: 320,
+			height: 240,
+			image_format: 'jpeg',
+			jpeg_quality: 90
+		});
+		Webcam.attach( '#my_camera' );
+		
+		setInterval(function(){
+			// take snapshot and get image data
+			console.log("snap");
+			Webcam.snap(function(data_uri) {
+				// display results in page
+				var img = new Image();
+				img.src = data_uri;
+				document.body.appendChild(img);
+			});
+		}, 10000);
+	</script>
+	
+</body>
+</html>
+
