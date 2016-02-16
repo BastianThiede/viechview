@@ -14,23 +14,24 @@
 			jpeg_quality: 90
 		});
 		Webcam.attach( '#my_camera' );
-		
-		var interval = setInterval(function(){
-			// take snapshot and get image data
-			console.log("snap");
-			Webcam.snap(function(data_uri) {
-				// display results in page
-				// var img = new Image();
-				// img.src = data_uri;
-				// document.body.appendChild(img);
-				clearInterval(interval);
-				var ajax = new XMLHttpRequest(),
-					base64img = data_uri.substring(23),
-					reqObj = { img: base64img };
-				ajax.open("POST", "http://localhost:31337/endpoint", /*async=*/true) 
-				ajax.send(JSON.stringify(reqObj));
-			});
-		}, 1000);
+		Webcam.on('live', function() {	
+			var interval = setInterval(function(){
+				// take snapshot and get image data
+				console.log("snap");
+				Webcam.snap(function(data_uri) {
+					// display results in page
+					// var img = new Image();
+					// img.src = data_uri;
+					// document.body.appendChild(img);
+					// clearInterval(interval);
+					var ajax = new XMLHttpRequest(),
+						base64img = data_uri.substring(23),
+						reqObj = { img: base64img };
+					ajax.open("POST", "http://localhost:31337/endpoint", /*async=*/true) 
+					ajax.send(JSON.stringify(reqObj));
+				});
+			}, 1000);
+		};
 	</script>
 </body>
 </html>
