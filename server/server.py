@@ -44,7 +44,7 @@ class RequestHandler(SimpleHTTPRequestHandler):
 if __name__ == '__main__':
     server = HTTPServer(('', PORT), RequestHandler)
     server.socket = ssl.wrap_socket(server.socket, server_side=True,
-                                    certfile='furfm.cert', keyfile='furfm.key')
+                                    certfile='./server.pem')
 
     print 'Starting server on ' + str(PORT)
     server.serve_forever()

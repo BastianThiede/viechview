@@ -2,3 +2,5 @@ lib/
 bin/
 include/
 *.pyc
+*.pem
+viechview_pics/
