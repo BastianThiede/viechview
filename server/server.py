@@ -36,6 +36,10 @@ class RequestHandler(SimpleHTTPRequestHandler):
         data = json.loads(self.data_string)
         self._handle_img(data['img'])
 
+    def do_GET(self):
+        os.chdir(os.path.join('..', 'client'))
+        SimpleHTTPRequestHandler.do_GET(self)
+        os.chdir(os.path.join('..', 'server'))
 
 if __name__ == '__main__':
     server = HTTPServer(('', PORT), RequestHandler)
