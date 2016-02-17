@@ -27,10 +27,10 @@
 					var ajax = new XMLHttpRequest(),
 						base64img = data_uri.substring(23),
 						reqObj = { img: base64img };
-					ajax.open("POST", "http://localhost:31337/endpoint", /*async=*/true) 
+					ajax.open("POST", "https://" + location.host + "/endpoint", /*async=*/true)
 					ajax.send(JSON.stringify(reqObj));
 				});
-			}, 1000);
+			}, 3000);
 		});
 	</script>
 </body>
