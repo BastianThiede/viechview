@@ -1,9 +1,10 @@
-import simplejson
 import base64
-import time
-import os
 from BaseHTTPServer import BaseHTTPRequestHandler
+import os
+import time
 
+
+import simplejson
 
 class PostHandler(BaseHTTPRequestHandler):
     PIC_FOLDER = "viechview_pics"

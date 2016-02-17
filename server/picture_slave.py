@@ -1,11 +1,10 @@
-import subprocess
-import uuid
-import time
-import os
-import ftplib
-import requests
 import base64
+import os
+import subprocess
+import time
+import uuid
 
+import requests
 def take_picture(picture_name, resolution='640x480'):
     """
     taking a webcam picture with fswebcam (so fswebcam has to be installed)
