@@ -1,22 +1,34 @@
 import simplejson
+import base64
+import time
+import os
 from BaseHTTPServer import BaseHTTPRequestHandler
 
 
 class PostHandler(BaseHTTPRequestHandler):
+    PIC_FOLDER = "viechview_pics"
     def _set_headers(self):
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
         self.end_headers()
 
     def _handle_img(self,img):
-        print img
+        human_readable_time = time.strftime("%d_%b_%Y_%H_%M_%S",
+                                            time.gmtime())
+        day_of_week = time.strftime("%A",time.gmtime())
+        day_folder_name = os.path.join(self.PIC_FOLDER,day_of_week)
+        if not os.path.isdir(day_folder_name):
+            os.makedirs(os.path.abspath(day_folder_name))
+        fname = ".".join([human_readable_time, 'jpg'])
+        f_path = os.path.join(day_folder_name,fname)
+        with open(f_path,"wb") as f:
+            f.write(base64.b64decode(img))
+        print "Wrote File"
+
 
     def do_POST(self):
         self._set_headers()
         self.data_string = self.rfile.read(int(self.headers['Content-Length']))
-        self.send_response(200)
-        self.end_headers()
-
         data = simplejson.loads(self.data_string)
         self._handle_img(data['img'])
 
