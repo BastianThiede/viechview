@@ -9,7 +9,7 @@ class PostHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def _handle_img(self,img):
-        pass
+        print img
 
     def do_POST(self):
         self._set_headers()
@@ -18,7 +18,7 @@ class PostHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
         data = simplejson.loads(self.data_string)
-        self._handle_img(self.data['img'])
+        self._handle_img(data['img'])
 
 
 if __name__ == '__main__':
