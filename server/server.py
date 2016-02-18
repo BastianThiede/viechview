@@ -13,7 +13,6 @@ PORT = 31337
 
 class RequestHandler(SimpleHTTPRequestHandler):
     PIC_FOLDER = "viechview_pics"
-    last_date = []
     def _set_headers(self):
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
@@ -34,25 +33,27 @@ class RequestHandler(SimpleHTTPRequestHandler):
             os.makedirs(os.path.abspath(folder_name))
 
 
-    def _handle_img(self, img):
+    def _handle_img(self, img,client_ip):
         human_readable_time = time.strftime("%d_%b_%Y_%H_%M_%S",
                                             time.gmtime())
         day_of_week = time.strftime("%A", time.gmtime())
         day_folder_name = os.path.join(self.PIC_FOLDER, day_of_week)
-        self.create_folder_if_not_exists(day_folder_name)
         fname = ".".join([human_readable_time, 'jpg'])
-        f_path = os.path.join(day_folder_name, fname)
+        day_folder_path = os.path.abspath(day_folder_name)
+        client_path = os.path.join(day_folder_path,client_ip)
+        self.create_folder_if_not_exists(client_path)
+        f_path = os.path.join(client_path, fname)
         with open(f_path, "wb") as f:
             f.write(base64.b64decode(img))
         print "Wrote File {} ".format(fname)
-        abs_path = os.path.abspath(day_folder_name)
-        if len(self.list_filenames_in_folder(abs_path)) > 100:
-                print "createing gif"
+        folder_paths = [os.path.join(day_folder_path,folder) for folder 
+                in os.listdir(day_folder_path) if os.path.isdir(os.path.join(day_folder_path,folder))]
+        full_folder_paths = [directory for directory in folder_paths if len(self.list_filenames_in_folder(directory)) > 100]
+        for abs_path in full_folder_paths:
                 new_pictures = self.list_filenames_in_folder(abs_path)
                 last_date = self._get_last_date_fname(new_pictures)
                 gif_name = "giffed_pic_until_{last_date}.gif".format(last_date=last_date)
                 wildcard = os.path.join(abs_path,"*.jpg")
-                print wildcard
                 subprocess.check_call(['convert', '-delay', '20', '-loop', 
                                        '0',wildcard, os.path.join(abs_path,gif_name)])
                 used_pic_folder = 'used_pictures'
@@ -64,9 +65,10 @@ class RequestHandler(SimpleHTTPRequestHandler):
 
     def do_POST(self):
         self._set_headers()
+        client_ip =  self.client_address[0]
         self.data_string = self.rfile.read(int(self.headers['Content-Length']))
         data = json.loads(self.data_string)
-        self._handle_img(data['img'])
+        self._handle_img(data['img'],client_ip)
 
     def do_GET(self):
         os.chdir(os.path.join('..', 'client'))
