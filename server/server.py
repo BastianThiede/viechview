@@ -30,8 +30,8 @@ class RequestHandler(SimpleHTTPRequestHandler):
 	return path
 
     def create_folder_if_not_exists(self,folder_name):
-                if not os.path.isdir(folder_name):
-                                os.makedirs(os.path.abspath(folder_name))
+        if not os.path.isdir(folder_name):
+            os.makedirs(os.path.abspath(folder_name))
 
     def _handle_img(self, img,client_ip):
         human_readable_time = time.strftime("%d_%b_%Y_%H_%M_%S",
