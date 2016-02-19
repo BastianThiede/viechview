@@ -1,6 +1,7 @@
 from BaseHTTPServer import HTTPServer
 import base64
 from SimpleHTTPServer import SimpleHTTPRequestHandler
+from SocketServer import ThreadingMixIn
 import os
 import shutil
 import ssl
@@ -56,8 +57,12 @@ class RequestHandler(SimpleHTTPRequestHandler):
         SimpleHTTPRequestHandler.do_GET(self)
         os.chdir(os.path.join('..', 'server'))
 
+
+class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
+        """Handle requests in a separate thread."""
+
 if __name__ == '__main__':
-    server = HTTPServer(('', PORT), RequestHandler)
+    server = ThreadedHTTPServer(('', PORT), RequestHandler)
     server.socket = ssl.wrap_socket(server.socket, server_side=True,
                                     certfile='./server.pem')
     print 'Starting server on ' + str(PORT)
