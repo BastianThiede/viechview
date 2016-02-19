@@ -2,8 +2,9 @@
 
 To start the server:
 ```sh
+$ cd server
 $ sh generate_pem.sh
-$ python server/server.py
-$ python server/gif_creator.py
+$ python server.py
+$ python gif_creator.py
 ```
 
