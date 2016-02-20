@@ -44,7 +44,6 @@ class RequestHandler(SimpleHTTPRequestHandler):
         f_path = os.path.join(client_path, fname)
         with open(f_path, "wb") as f:
             f.write(base64.b64decode(img))
-        print "Wrote File {} ".format(fname)
 
     def do_POST(self):
         self._set_headers()

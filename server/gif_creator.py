@@ -8,7 +8,7 @@ import time
 class GifCreator(object):
     def __init__(self):
         super(GifCreator, self).__init__()
-        self.pics_needed = 10
+        self.pics_needed = 100
         self.check_interval = 10
 
     def create_day_folder_path(self):
@@ -43,11 +43,9 @@ class GifCreator(object):
             folder_paths = [os.path.join(day_folder_path, folder) for folder
                             in os.listdir(day_folder_path) if os.path.isdir(
                     os.path.join(day_folder_path, folder))]
-            print folder_paths
             full_folder_paths = [directory for directory in folder_paths if
                                  len(self.list_filenames_in_folder(
                                      directory)) > self.pics_needed]
-            print full_folder_paths
             for abs_path in full_folder_paths:
                 new_pictures = self.list_filenames_in_folder(abs_path)
                 last_date = self._get_last_date_fname(new_pictures)
